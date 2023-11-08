@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metrics App</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin-top: 50px;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            margin: 10px 0;
+        }
+        .table {
+            margin-top: 20px;
+            background-color: rgb(193, 193, 193);
+        }
+        .input-group-text {
+            background-color: #495057;
+            color: #fff;
+        }
+        .input-group-prepend .input-group-text {
+            border: none;
+        }
+        .form-control {
+            border-left: none;
+        }
+        .input-group > .form-control:not(:first-child) {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <div class="row justify-content-md-center">
+            <div class="col-md-8">
+                <!-- Input for SDK Key and Flag Key -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">SDK Key</span>
+                    </div>
+                    <input type="text" id="sdkKey" class="form-control" placeholder="Enter SDK Key" aria-label="SDK Key" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Flag Key</span>
+                    </div>
+                    <input type="text" id="flagKey" class="form-control" placeholder="Enter Flag Key" aria-label="Flag Key" aria-describedby="inputGroup-sizing-default">
+                </div>
+                <button class="btn btn-dark btn-custom" onclick="submitKeys()">Submit Keys</button>
+                
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="text-center" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Table for Metrics and Percentage Converted -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Metrics</th>
+                            <th scope="col">Percentage Converted</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputTable">
+                        <tr class="animate__animated animate__fadeIn">
+                            <td><input type="text" name="metrics" class="form-control"/></td>
+                            <td><input type="number" name="percentages" class="form-control"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-info btn-custom" onclick="addRow()">Add Row</button>
+                <button class="btn btn-primary btn-custom" onclick="submitData()">Submit Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle adding rows and submitting data -->
+    <script>
+        function addRow() {
+            let table = document.getElementById("inputTable");
+            let row = table.insertRow(-1);
+            row.classList.add('animate__animated', 'animate__fadeIn');
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            cell1.innerHTML = '<input type="text" name="metrics" class="form-control"/>';
+            cell2.innerHTML = '<input type="number" name="percentages" class="form-control"/>';
+        }
+
+        function submitData() {
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            let metrics = Array.from(document.getElementsByName("metrics")).map(input => input.value);
+            let percentages = Array.from(document.getElementsByName("percentages")).map(input => input.value);
+
+            fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ metrics: metrics, percentages: percentages })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert("Data submitted successfully!");
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Hide loading spinner
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+        }
+
+        function submitKeys() {
+            // ... existing submitKeys function ...
+        }
+    </script>
+    <!-- Bootstrap and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
