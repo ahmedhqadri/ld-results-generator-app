@@ -20,6 +20,8 @@ def add_keys():
     sdk_key = content.get('sdk_key')
     flag_key = content.get('flag_key')
 
+    print('hererere')
+
     data_store["sdk_key"] = sdk_key
     data_store["flag_key"] = flag_key
 
@@ -54,4 +56,4 @@ def index():
     return app.send_static_file('index.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(debug=True, host='0.0.0.0', port=5002)
