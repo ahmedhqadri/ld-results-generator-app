@@ -23,7 +23,7 @@
         }
         .table {
             margin-top: 20px;
-            background-color: rgb(193, 193, 193);
+            background-color: #aaaaaa;
         }
         .input-group-text {
             background-color: #495057;
@@ -43,6 +43,13 @@
 </head>
 <body>
     <div class="container animate__animated animate__fadeIn">
+
+          <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         <div class="row justify-content-md-center">
             <div class="col-md-8">
                 <!-- Input for SDK Key and Flag Key -->
@@ -58,15 +65,8 @@
                     </div>
                     <input type="text" id="flagKey" class="form-control" placeholder="Enter Flag Key" aria-label="Flag Key" aria-describedby="inputGroup-sizing-default">
                 </div>
-                <button class="btn btn-dark btn-custom" onclick="submitKeys()">Submit Keys</button>
+                <button class="btn btn-dark btn-custom" onclick="submitKeys()">Initialize LD Client</button>
                 
-                <!-- Loading Spinner -->
-                <div id="loadingSpinner" class="text-center" style="display: none;">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-
                 <!-- Table for Metrics and Percentage Converted -->
                 <table class="table table-hover">
                     <thead>
@@ -83,7 +83,7 @@
                     </tbody>
                 </table>
                 <button class="btn btn-info btn-custom" onclick="addRow()">Add Row</button>
-                <button class="btn btn-primary btn-custom" onclick="submitData()">Submit Data</button>
+                <button class="btn btn-primary btn-custom" onclick="submitData()">Generate Results</button>
             </div>
         </div>
     </div>
@@ -101,7 +101,7 @@
         }
 
         function submitData() {
-            // Show loading spinner
+             // Show loading spinner
             document.getElementById('loadingSpinner').style.display = 'block';
 
             let metrics = Array.from(document.getElementsByName("metrics")).map(input => input.value);
@@ -117,7 +117,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                alert("Data submitted successfully!");
+                alert("Generated Results Successfully!");
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -129,7 +129,24 @@
         }
 
         function submitKeys() {
-            // ... existing submitKeys function ...
+            let sdkKey = document.getElementById("sdkKey").value;
+            let flagKey = document.getElementById("flagKey").value;
+
+            fetch('/add_keys', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sdk_key: sdkKey, flag_key: flagKey })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert("Client Initialized Successfully!");
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
     </script>
     <!-- Bootstrap and Popper.js -->
