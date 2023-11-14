@@ -3,7 +3,7 @@
 Inspired by : https://github.com/ttotenberg-ld/ld_funnel_experiment_runner, https://github.com/ttotenberg-ld/ld_migration_runner
 
 This app consists of the following generator tools: 
-- Funnel Experiment: Creates a funnel experiment with a number of metrics and a percentage converted
+- Funnel Experiment: Creates results for funnel experiment using metrics and percentage converted
 - Migration Runner: Generates migration insights for your migration feature flag
 
 ## Setup / Running 
