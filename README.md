@@ -1,8 +1,10 @@
-# Funnel Experiment Generator
+# Results Generator App for LaunchDarkly
 
-Inspired by : https://github.com/ttotenberg-ld/ld_funnel_experiment_runner
+Inspired by : https://github.com/ttotenberg-ld/ld_funnel_experiment_runner, https://github.com/ttotenberg-ld/ld_migration_runner
 
-This tool will help generate results for Funnel Experiments in LaunchDarkly
+This tool consists of the following results generators:
+- Funnel Experiment: Creates a funnel experiment with a number of metrics and a percentage converted
+- Migration Runner: Generates migration insights for your migration feature flag
 
 ## Setup / Running 
 - Open Terminal
@@ -12,7 +14,7 @@ This tool will help generate results for Funnel Experiments in LaunchDarkly
 - Close terminal when completed - this will remove the container
 
 ## Variables:
-- SDK Key: Your LD server-side SDK Key
-- Flag Key: Your LD flag key used in the experiment
+- SDK Key: Your LD server-side SDK Key (Required)
+- Flag Key: Your LD flag key used in the experiment (Required)
 - Metrics: Individual metrics part of the funnel experiment
 - Percentage Converted: Number from range 1 - 100 where probability to convert metric increases as number gets closer to 100.

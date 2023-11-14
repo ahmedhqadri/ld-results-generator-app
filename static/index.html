@@ -52,6 +52,7 @@
         </div>
         <div class="row justify-content-md-center">
             <div class="col-md-8">
+                <h3 style="padding-top: 10px; padding-bottom: 10px">Initialize LD</h3>
                 <!-- Input for SDK Key and Flag Key -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -68,6 +69,7 @@
                 <button class="btn btn-dark btn-custom" onclick="submitKeys()">Initialize LD Client</button>
                 
                 <!-- Table for Metrics and Percentage Converted -->
+                <h3 style="padding-top: 30px; padding-bottom: 10px">Generate Funnel Experiment Results</h3>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -84,6 +86,13 @@
                 </table>
                 <button class="btn btn-info btn-custom" onclick="addRow()">Add Row</button>
                 <button class="btn btn-primary btn-custom" onclick="submitData()">Generate Results</button>
+            </div>
+        </div>
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-8">
+                <h3>Generate Migration Results</h3>
+                <button id="startButton" class="btn btn-success btn-custom" onclick="startMigration()">Start</button>
+                <button class="btn btn-danger btn-custom" onclick="stopMigration()">Stop</button>
             </div>
         </div>
     </div>
@@ -146,6 +155,52 @@
             })
             .catch((error) => {
                 console.error('Error:', error);
+            });
+        }
+
+        function startMigration() {
+            document.getElementById('startButton').innerText = 'Running...';
+            document.getElementById('startButton').disabled = true;
+
+            fetch('/start_migration', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                checkMigrationStatus();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function stopMigration() {
+            fetch('/stop_migration', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('startButton').innerText = 'Start';
+                document.getElementById('startButton').disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function checkMigrationStatus() {
+            fetch('/data', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.migration_running) {
+                    document.getElementById('startButton').innerText = 'Start';
+                    document.getElementById('startButton').disabled = false;
+                } else {
+                    setTimeout(checkMigrationStatus, 1000); // Check status every 1 second
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('startButton').innerText = 'Start';
+                document.getElementById('startButton').disabled = false;
             });
         }
     </script>
